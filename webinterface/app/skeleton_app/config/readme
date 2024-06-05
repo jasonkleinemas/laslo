@@ -1,0 +1,7 @@
+install_10_base.php - This will have the basic application information.
+install_20_base_tables_data.php - The will have the data for other system tables.
+install_30_application_tables_sql.php - The custom tables for the application.
+install_40_application_tables_data.php - The data for the custom tables for the application.
+
+
+

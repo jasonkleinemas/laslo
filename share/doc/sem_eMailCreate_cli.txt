@@ -1,0 +1,102 @@
+Create eMail from command line.
+
+
+Make sure the job is setup in sysJobScheduler table
+
+In your program check that the enviorment vaiable LASLO_system_ini is equal to 'FOUND'
+
+The root dir will be in a enviorment variable LASLO_cli_rootPath.
+--------------------------------------------------------------------------------------------
+                                                                --- Step 1, Create eMail ---
+                                                                ----------------------------
+
+	call <LASLO_cli_rootPath>bin/ejs_eMailCreate.php
+	
+		   Option               	Required   Allowed Values            
+    --step=create             Yes        create
+	  --sjs_UUID='<sjs_UUID>'   Yes        Any            sjs_UUID from the sysJobScheduler Table.
+	  --subject='<SUBJECT>'     Yes        Any            Subject line.
+	  --bodyType=text           No         text|html      Send body as text or html. Default TEXT.
+	  --queue=now               No         now|delay      This will create the eMail in queue selected. Default now
+	  --debug=0                 No         0|1            Default 0 debug off.
+
+
+	Returns
+		Exit code of 1 on failure. Check logs for errors.
+		Basefile name with queue selected <Full_PATH_BASE_NAME> use this value when writing to files.
+
+	This will create two files 
+		<Full_PATH_BASE_NAME>.emn.ini
+		<Full_PATH_BASE_NAME>.wrk
+
+	The .enm.ini file format.
+	
+[general]
+sesc_UUID=<sjs_UUID>
+subject=<SUBJECT>
+bodyType=<BODY_TYPE>
+debug=<DEBUG>
+
+[addressKeys]
+key[]=0851fdf0-f022-11e9-85c1-7446a0b52568 ; Key generated 
+
+[addresses]
+name[0851fdf0-f022-11e9-85c1-7446a0b52568]=name
+email[0851fdf0-f022-11e9-85c1-7446a0b52568]=name@server.net
+
+--------------------------------------------------------------------------------------------
+                                                            --- Step 2. Write eMail Body ---
+                                                            --------------------------------
+  Write the body of your message to <Full_PATH_BASE_NAME>.wrk
+
+--------------------------------------------------------------------------------------------
+                                                       --- Step 3. Add Atachment Optinal ---
+                                                       -------------------------------------
+
+To add an attachment.
+
+	call <LASLO_cli_rootPath>bin/ejs_eMailCreate.php
+
+		  Option               	                  Required   Allowed Values            
+    --step=addAttachment                      Yes        addAttachment
+    --basePathFileName=<Full_PATH_BASE_NAME>  Yes        File name returned during the create step.
+    --fileName=<FILE_NAME>                    Yes        File name to be dispayed in the email
+
+
+	Returns
+		Exit code of 1 on failure. Check logs for errors.
+		This is the full path file name. Write to this file. <ATTACHMENT_Full_PATH_FILE>
+	
+	This will modify the .enm.ini file. For each file added  it will create an entry in attachmentKeys and attachments groups.
+	
+[attachmentKeys]
+key[]=e14ded2e-eab1-11e9-85c1-7446a0b52568 ; Key generated 
+key[]=0397ac12-eab2-11e9-85c1-7446a0b52568
+key[]=0c1e7096-eab2-11e9-85c1-7446a0b52568
+
+[attachments]
+file[e14ded2e-eab1-11e9-85c1-7446a0b52568]=<system created> ; This is the file to write to.
+name[e14ded2e-eab1-11e9-85c1-7446a0b52568]=<FILE_NAME> 			; This is the name that will display in the email.
+file[0397ac12-eab2-11e9-85c1-7446a0b52568]=<system created>
+name[0397ac12-eab2-11e9-85c1-7446a0b52568]=<FILE_NAME>
+file[0c1e7096-eab2-11e9-85c1-7446a0b52568]=<system created>
+name[0c1e7096-eab2-11e9-85c1-7446a0b52568]=<FILE_NAME>
+	
+	Write the attachment to <ATTACHMENT_PATH_FILE>.wrk
+
+
+--------------------------------------------------------------------------------------------
+                                                                  --- Step 4. Send eMail ---
+                                                                  --------------------------
+When you are ready to send the message.
+
+	Call <LASLO_cli_rootPath>bin/ejs_eMailCreate.php
+
+		  Option               	                  Required   Allowed Values
+    --step=send                               Yes        send
+    --basePathFileName=<Full_PATH_BASE_NAME>  Yes        File name returned during the create step.
+	
+		Returns
+			Exit code of 1 on failure. Check logs for errors.
+			Exit code of 0 on success.
+

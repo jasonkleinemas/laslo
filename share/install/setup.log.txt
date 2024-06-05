@@ -1,0 +1,17 @@
+Create a dir in opt
+>mkdir /opt/<name>
+
+
+The I created a link in the /var/www/ dir and created a link to /opt/laslo/public called laslo   
+ln -s /opt/laslo/public /var/www/laslo  
+
+Then I access it via http://<ip>/laslo/  
+
+Each sub application has it's own public directory. i was thinking of making links in the laslo/public to the /laslo/app1/public to acess thoes files.  
+ln -s /opt/laslo/app1/public /opt/laslo/public/app1  
+
+
+apt install php php8.1-cli
+apt install php8.1-common php8.1-mysql php8.1-pgsql php8.1-xml php8.1-xmlrpc php8.1-curl php8.1-gd php8.1-imagick php8.1-cli php8.1-dev php8.1-imap php8.1-mbstring php8.1-opcache php8.1-soap php8.1-zip php8.1-redis php8.1-intl
+
+
